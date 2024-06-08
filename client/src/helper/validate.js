@@ -52,7 +52,7 @@ export async function validateProfilePage(values) {
 
 // validate password
 function passwordVerify(errors = {}, values) {
-    const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    const specialChars = /[`!@#$%^&*()_+\-=[\]{};':"|,.<>/?~]/;
     if (!values.password) {
         errors.password = toast.error("Password Required...!");
     } else if (values.password.includes(" ")) {
