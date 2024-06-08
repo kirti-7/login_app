@@ -62,12 +62,14 @@ export async function register(req, res) {
         // Check if the username already exists
         const existingUsername = await UserModel.findOne({ username });
         if (existingUsername) {
+            // console.log("Username already exists.");
             return res.status(400).json({ error: "Username already exists." });
         }
 
         // Check if the email already exists
         const existingEmail = await UserModel.findOne({ email });
         if (existingEmail) {
+            // console.log("Email already exists.");
             return res.status(400).json({ error: "Email already exists." });
         }
 
@@ -82,13 +84,17 @@ export async function register(req, res) {
             email,
         });
 
-        user.save()
-            .then(result => res.status(201).send({ msg: "User Registered Successfully." }))
-            .catch(error => {
-                console.error("Save error:", error);
-                res.status(500).send({ msg: "Failed to save user" });
-            })
+        // user.save()
+        //     .then(result => res.status(201).send({ msg: "User Registered Successfully." }))
+        //     .catch(error => {
+        //         console.error("Save error:", error);
+        //         res.status(500).send({ msg: "Failed to save user" });
+        //     })
 
+
+        await user.save();
+
+        return res.status(201).send({ msg: "User Registered Successfully." });
 
         // Promise.all([existingUsername, existingEmail])
         //     .then(() => {
@@ -121,7 +127,7 @@ export async function register(req, res) {
         //     })
 
     } catch (error) {
-        console.error("Error during registration:", error);
+        console.log("Error during registration:", error);
         return res.status(500).json({ error: "Internal server error." });
     }
 }

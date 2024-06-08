@@ -43,21 +43,25 @@ export async function getUser({username}) {
 // register user function 
 const registerUser = async (credentials) => {
     try {
-
         // console.log(credentials);
+
         const { data: { msg }, status } = await axios.post('/api/register', credentials);
         let { username, email } = credentials;
 
+        // console.log(msg.response.data);
+
         // send email 
         if (status === 201) {
-            await axios.post('/api/registerMail', { username, userEmail: email, text: msg });
-            
+            await axios.post('/api/registerMail', { username, userEmail: email, text: msg });  
         }
-
-        return Promise.resolve(msg);
-
+        return await Promise.resolve(msg);
     } catch (error) {
-        return Promise.reject({error});
+        // console.log(error);
+        let errorMsg = 'Registration failed';
+        if (error.response && error.response.data && error.response.data.error) {
+            errorMsg = error.response.data.error;
+        }
+        throw new Error(errorMsg);
     }
 }
 
@@ -65,8 +69,10 @@ const registerUser = async (credentials) => {
 const verifyPassword = async ({username, password}) => {
     try {
         if (username) {
-            const data = await axios.post('/api/login', { username, password });
-            return Promise.resolve({ data });
+            // const data = await axios.post('/api/login', { username, password });
+            // return Promise.resolve({ data });
+            const response = await axios.post('/api/login', { username, password });
+            return response.data; // Resolve with the response data
         }
     } catch (error) {
         return Promise.reject({ error: "Password doesn't match!" });

@@ -25,21 +25,30 @@ const Password = () => {
     validate: validatePassword,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit: async values => {
-      const loginPromise = verifyPassword({ username, password: values.password });
+    onSubmit: async (values) => {
+      try {
+        const loginPromise = verifyPassword({ username, password: values.password });
       
-      toast.promise(loginPromise, {
-        loading: 'Verifying password',
-        success: <b>Login Successful!</b>,
-        error: <b>Incorrect Password!</b>
-      });
+        toast.promise(loginPromise, {
+          loading: 'Verifying password',
+          success: <b>Login Successful!</b>,
+          error: <b>Incorrect Password!</b>
+        });
 
-      loginPromise.then(res => {
-        const { token } = res.data.data;
-        // console.log(token);
-        localStorage.setItem('token', token);
-        navigate('/profile');
-      });
+        loginPromise.then(res => {
+          // console.log(res);
+          const { token } = res;
+          // console.log(token);
+          localStorage.setItem('token', token);
+          navigate('/profile');
+        }).catch((error) => {
+          console.error('Error during login:', error);
+          // toast.error('Incorrect Password!');
+        });
+      } catch (error) {
+        console.error('Error during form submission:', error);
+        toast.error('An unexpected error occurred!');
+      }
     }
   });
 

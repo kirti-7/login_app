@@ -5,16 +5,12 @@ import Mailgen from 'mailgen';
 
 
 let transporter = await nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false,
+    service: 'gmail',
     auth: {
-        user: process.env.EMAIL, // generated ethereal user
-        pass: process.env.PASSWORD, // generated ethereal password
+        user: process.env.NODEMAILER_EMAIL, // generated ethereal user
+        pass: process.env.NODEMAILER_PASSWORD, // generated ethereal password
     },
 });
-
-
 
 let MailGenerator = new Mailgen({
     theme: "default",
@@ -46,7 +42,7 @@ export const registerMail = async (req, res) => {
     var emailBody = MailGenerator.generate(email);
     let message = {
         // from: process.env.EMAIL,
-        from: process.env.EMAIL,
+        from: process.env.NODEMAILER_EMAIL,
         to: userEmail,
         subject: subject || "Signup Successful",
         html: emailBody

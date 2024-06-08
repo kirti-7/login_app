@@ -26,14 +26,27 @@ const Register = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async values => {
+      try {
       values = await Object.assign(values, { profile: file || '' });
-      const registerPromise = registerUser(values);
+        const registerPromise = registerUser(values);
+        
       toast.promise(registerPromise, {
         loading: 'Creating...',
         success: <b>Register Successfully...!</b>,
-        error: <b>Could not Register.</b>
+        error: (err) => {
+          // Conditional rendering of error message
+          return err && err.message ? <b>{err.message}</b> : <b>Could not register!</b>;
+        }
       });
-      registerPromise.then(navigate('/'));
+        registerPromise
+          .then(navigate('/'))
+          .catch((error) => {
+            console.error('Error during form submission:', error)
+          });
+      } catch (error) {
+        console.error('Error during form submission:', error);
+        toast.error('An unexpected error occurred!');
+      }
     }
 
   });
@@ -71,7 +84,7 @@ const Register = () => {
             </div>
 
             <div className="text-center py-4">
-              <span className='text-gray-500'>Already have an account? <Link className='text-red-500' to='/recovery'>Login Now!</Link> </span>
+              <span className='text-gray-500'>Already have an account? <Link className='text-red-500' to='/'>Login Now!</Link> </span>
             </div>
           </form>
         </div>
