@@ -60,7 +60,7 @@ const Profile = () => {
     <div className="container mx-auto">
       <Toaster position='top-center' reverseOrder={false} ></Toaster>
       <div className="flex justify-center items-center h-screen">
-        <div className={`${usernameStyles.glass} ${profileStyles.glass}`} style={{ width: "45%" }} >
+        <div className={`${usernameStyles.glass} ${profileStyles.glass}`} style={{ width: "45%", height: "max-content"}} >
           <div className="title flex flex-col items-center">
             <h4 className='text-5xl font-bold'>Profile</h4>
             <span className='py-4 text-xl w-2/3 text-center text-gray-500'>
