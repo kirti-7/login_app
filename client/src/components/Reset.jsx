@@ -14,7 +14,7 @@ const Reset = () => {
   const navigate = useNavigate();
   const { username } = useAuthStore(state => state.auth);
 
-  const [{ isLoading, apiData, status, serverError }] = useFetch('createResetSession');
+  const [{ isLoading, status, serverError }] = useFetch('createResetSession');
   
 
   const formik = useFormik({
